@@ -5,10 +5,16 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tfandkusu.tpic.ui.theme.MyTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -20,7 +26,11 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             MyTheme {
-                MainScreen()
+                val state by viewModel.state.collectAsStateWithLifecycle()
+                MainScreen(
+                    state = state,
+                    onLastPageShow = viewModel::onLastPageShow
+                )
             }
         }
     }
