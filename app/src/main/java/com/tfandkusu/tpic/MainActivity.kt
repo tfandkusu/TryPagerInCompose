@@ -27,7 +27,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyTheme {
                 val state by viewModel.state.collectAsStateWithLifecycle()
-                MainScreen(state = state)
+                MainScreen(
+                    state = state,
+                    onLastPageShow = viewModel::onLastPageShow
+                )
             }
         }
     }

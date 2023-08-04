@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.viewmodel)
     implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.napier)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

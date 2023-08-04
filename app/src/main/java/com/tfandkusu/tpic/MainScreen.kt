@@ -1,7 +1,6 @@
 package com.tfandkusu.tpic
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +14,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,8 +25,19 @@ import com.tfandkusu.tpic.ui.theme.MyTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun MainScreen(state: MainViewModel.State) {
+fun MainScreen(
+    state: MainViewModel.State,
+    onLastPageShow: () -> Unit,
+) {
     val pagerState = rememberPagerState()
+    LaunchedEffect(Unit) {
+        snapshotFlow { pagerState.currentPage }.collect { page ->
+            if (page >= state.monthList.size - 1) {
+                onLastPageShow()
+            }
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -73,7 +85,8 @@ private fun Preview() {
                     YearMonth(year = 2023, month = 2),
                     YearMonth(year = 2023, month = 1),
                 )
-            )
+            ),
+            onLastPageShow = {}
         )
     }
 }
