@@ -19,11 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.tfandkusu.tpic.model.YearMonth
 import com.tfandkusu.tpic.ui.theme.MyTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(state: MainViewModel.State) {
     val pagerState = rememberPagerState()
     Scaffold(
         topBar = {
@@ -43,16 +44,17 @@ fun MainScreen() {
                 .padding(padding)
                 .fillMaxWidth(),
             state = pagerState,
-            pageCount = 3,
+            pageCount = state.monthList.size,
             reverseLayout = true
         ) { page ->
+            val month = state.monthList[page]
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
                 Text(
-                    text = "2023/%02d".format(3 - page),
+                    text = "%04d/%02d".format(month.year, month.month),
                     style = MaterialTheme.typography.headlineLarge,
                 )
             }
@@ -64,6 +66,14 @@ fun MainScreen() {
 @Preview
 private fun Preview() {
     MyTheme {
-        MainScreen()
+        MainScreen(
+            MainViewModel.State(
+                monthList = listOf(
+                    YearMonth(year = 2023, month = 3),
+                    YearMonth(year = 2023, month = 2),
+                    YearMonth(year = 2023, month = 1),
+                )
+            )
+        )
     }
 }
